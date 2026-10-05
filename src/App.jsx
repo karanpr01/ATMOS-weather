@@ -1,3 +1,5 @@
+import ThemeToggle from './components/ThemeToggle'
+
 export default function App() {
   return (
     <main className="min-h-screen p-8">
@@ -5,11 +7,7 @@ export default function App() {
         <p className="text-sm font-semibold text-muted-foreground">Mumbai,India</p>
         <p className=" mt-2 text-7xl font-light tracking-tighter">28°</p>
         <p className="mt-1 text-xl font-semibold">Partly Cloudy</p>
-        <button
-        onClick={
-          () => document.documentElement.classList.toggle("dark")
-        }
-        >Toggle Theme</button>
+       <ThemeToggle/>
       </section>
     </main>
   )
