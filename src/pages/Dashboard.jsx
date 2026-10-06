@@ -7,7 +7,7 @@ export default function Dashboard() {
         <h1 className="text-sm font-semibold text-muted-foreground">
           Mumbai, India
         </h1>
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
       </div>
       <p className="mt-2 text-7xl font-light tracking-tighter">28°</p>
       <p className="mt-1 text-lg font-semibold">Partly Cloudy</p>

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark*));
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-sans: "Manrope Variable", system-ui, sans-serif;
@@ -15,6 +15,8 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-destructive: var(--destructive);
+  --color-active: var(--active);
+  --color-active-foreground: var(--active-foreground);
 }
 
 :root {
@@ -29,6 +31,8 @@
   --success: #4d8066;
   --warning: #a8732e;
   --destructive: #a64f4f;
+  --active: #e4e6fb;
+  --active-foreground: #4338a8;
 }
 
 .dark {
@@ -43,9 +47,23 @@
   --success: #8fbfa4;
   --warning: #d7a45c;
   --destructive: #c87575;
+  --active: #2a2c4d;
+  --active-foreground: #b4bcff;
 }
 
-body{
-  background:var(--background) ;
+body {
+  background: var(--background);
   color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

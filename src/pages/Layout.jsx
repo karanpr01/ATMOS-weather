@@ -1,0 +1,98 @@
+import { NavLink, Outlet } from "react-router";
+import { CloudSun } from "lucide-react";
+import { navItems } from "../lib/nav";
+import ThemeToggle from "../components/ThemeToggle";
+
+const desktopLink = ({ isActive }) =>
+  `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${
+    isActive
+      ? "bg-active text-foreground"
+      : "text-muted-foreground hover:bg-muted"
+  }`;
+
+// const mobileLink = ({ isActive }) =>
+//   `flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold ${
+//     isActive ? "text-primary" : "text-muted-foreground"
+//   }`;
+
+const mobileLink =
+  "flex min-h-14 min-w-16 flex-col items-center justify-center gap-1 rounded-xl text-[11px] transition-colors active:scale-95";
+
+export default function Layout() {
+  return (
+    <div className="min-h-screen md:flex">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"
+      >
+        Skip to content
+      </a>
+
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-border bg-card p-4 md:flex">
+        <div className="mb-6 flex items-center gap-2 px-2 font-extrabold tracking-[0.2em]">
+          <CloudSun className="size-5 text-primary" aria-hidden="true" />
+          ATMOS
+        </div>
+        <nav aria-label="Main" className="flex flex-col gap-1">
+          {navItems.map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={to} end={to === "/"} className={desktopLink}>
+              <Icon className="size-5" aria-hidden="true" />
+              {label}
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
+
+      <div className="min-w-0 flex-1">
+        <header className="flex items-center justify-between px-4 py-4 md:justify-end md:px-9 md:py-6">
+          <div className="flex items-center gap-2 font-extrabold tracking-[0.2em] md:hidden">
+            <CloudSun className="size-5 text-primary" aria-hidden="true" />
+            ATMOS
+          </div>
+          <ThemeToggle />
+        </header>
+        <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
+          <Outlet />
+        </main>
+      </div>
+
+      <nav
+        aria-label="Mobile"
+        className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-t border-border bg-card px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden"
+      >
+        {navItems
+          .filter((n) => n.mobile)
+          .map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={to} end={to === "/"} className={mobileLink}>
+              {({ isActive }) => (
+                <>
+                  <span
+                    className={`grid h-8 w-14 place-items-center rounded-full transition-colors duration-200 ${
+                      isActive
+                        ? "bg-active text-primary"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    <Icon
+                      className="size-5"
+                      strokeWidth={isActive ? 2.5 : 1.75}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span
+                    className={
+                      isActive
+                        ? "font-bold text-foreground"
+                        : "font-medium text-muted-foreground"
+                    }
+                  >
+                    {label}
+                  </span>
+                </>
+              )}
+            </NavLink>
+          ))}
+      </nav>
+    </div>
+  );
+}
