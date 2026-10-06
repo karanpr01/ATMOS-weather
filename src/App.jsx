@@ -1,14 +1,19 @@
-import ThemeToggle from './components/ThemeToggle'
+import { Routes, Route } from "react-router";
+import Dashboard from "./pages/Dashboard";
+import Placeholder from "./pages/Placeholder"
 
 export default function App() {
   return (
     <main className="min-h-screen p-8">
-      <section className="max-w-sm rounded-3xl border border-border bg-card p-6">
-        <p className="text-sm font-semibold text-muted-foreground">Mumbai,India</p>
-        <p className=" mt-2 text-7xl font-light tracking-tighter">28°</p>
-        <p className="mt-1 text-xl font-semibold">Partly Cloudy</p>
-       <ThemeToggle/>
-      </section>
+      <Routes>
+        <Route path="/" element={<Dashboard />}/>
+        <Route path="/forecast" element={<Placeholder title="Forecast" />}/>
+        <Route path="/locations" element={<Placeholder title="Locations"/>}/>
+        <Route path="/map" element={<Placeholder title="Map" />}/>
+        <Route path="/air-quality" element={<Placeholder title="Air Quality" />}/>
+        <Route path="/settings" element={<Placeholder title="Settings" />}/>
+        <Route path="*" element={<Placeholder title="Page Not Found" />}/>
+      </Routes>
     </main>
   )
 }
