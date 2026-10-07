@@ -1,9 +1,11 @@
+import { useSettings } from "../context/settings-context";
 import { useWeather } from "../hooks/useWeather";
-import { DEFAULT_LOCATION } from "../lib/location";
 import { describeWeather } from "../lib/weatherCodes";
+import { formatTemp } from "../lib/units";
 
 export default function Dashboard() {
-  const { data, isPending, isError, error, refetch } = useWeather(DEFAULT_LOCATION);
+  const { location, units } = useSettings();
+  const { data, isPending, isError, error, refetch } = useWeather(location);
 
   if (isPending) return <p>Loading weather…</p>;
 
@@ -26,14 +28,14 @@ export default function Dashboard() {
   return (
     <section className="max-w-sm rounded-3xl border border-border bg-card p-6">
       <h1 className="text-sm font-semibold text-muted-foreground">
-        {DEFAULT_LOCATION.name}, {DEFAULT_LOCATION.region}
+        {location.name}, {location.region}
       </h1>
       <p className="mt-2 text-7xl font-light tracking-tighter">
-        {Math.round(current.temperature_2m)}°
+        {formatTemp(current.temperature_2m, units.temp)}°
       </p>
       <p className="mt-1 text-lg font-semibold">{describeWeather(current.weather_code)}</p>
       <p className="mt-1 text-sm text-muted-foreground">
-        Feels like {Math.round(current.apparent_temperature)}° · Humidity{" "}
+        Feels like {formatTemp(current.apparent_temperature, units.temp)}° · Humidity{" "}
         {current.relative_humidity_2m}%
       </p>
     </section>

@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router";
 import { CloudSun } from "lucide-react";
 import { navItems } from "../lib/nav";
 import ThemeToggle from "../components/ThemeToggle";
+import UnitSwitch from "../components/UnitSwitch";
 
 const desktopLink = ({ isActive }) =>
   `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${
@@ -49,7 +50,10 @@ export default function Layout() {
             <CloudSun className="size-5 text-primary" aria-hidden="true" />
             ATMOS
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <UnitSwitch />
+            <ThemeToggle />
+          </div>
         </header>
         <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
           <Outlet />
