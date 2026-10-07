@@ -31,8 +31,8 @@
   --success: #4d8066;
   --warning: #a8732e;
   --destructive: #a64f4f;
-  --active: #e4e6fb;
-  --active-foreground: #4338a8;
+  --active: #535fe998;
+  --active-foreground: #2c1cbd;
 }
 
 .dark {
@@ -59,6 +59,11 @@ body {
 :focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

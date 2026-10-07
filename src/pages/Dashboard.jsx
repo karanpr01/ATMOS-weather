@@ -1,41 +1,51 @@
-import { useEffect, useState } from "react";
-import { getWeather } from "../lib/api";
-import { describeWeather } from "../lib/weatherCodes";
+import { WifiOff } from "lucide-react";
+import { useSettings } from "../context/settings-context";
+import { useWeather } from "../hooks/useWeather";
+import WeatherHero from "../components/WeatherHero";
+import StatsRow from "../components/StatsRow";
+import HourlyStrip from "../components/HourlyStrip";
+import DashboardSkeleton from "../components/DashboardSkeleton";
+import OfflineBanner from "../components/OfflineBanner";
 
 export default function Dashboard() {
-  const [weather, setWeather] = useState(null);
-  const [error, setError] = useState(null);
+  const { location, units } = useSettings();
+  const { data, isPending, isError, error, refetch, fetchStatus, dataUpdatedAt } =
+    useWeather(location);
 
-  useEffect(() => {
-    getWeather(19.076, 72.8777)
-    .then(setWeather)
-    .catch((err) => setError(err.message));
-  }, []);
-
-  if (error) {
-    return <p role="alert">{error}</p>;
+  if (isPending && fetchStatus === "paused") {
+    return (
+      <div role="status" className="max-w-md rounded-2xl border border-border bg-card p-6">
+        <WifiOff className="size-6 text-muted-foreground" aria-hidden="true" />
+        <p className="mt-3 font-semibold">You're offline.</p>
+        <p className="text-sm text-muted-foreground">
+          Connect to the internet and the weather will load by itself.
+        </p>
+      </div>
+    );
   }
 
-  if (!weather) {
-    return <p>Loading weather…</p>;
-  }
+  if (isPending) return <DashboardSkeleton />;
 
-  const current = weather.current;
+  if (isError) {
+    return (
+      <div role="alert" className="max-w-md rounded-2xl border border-border bg-card p-6">
+        <p className="font-semibold">{error.message}</p>
+        <button
+          onClick={() => refetch()}
+          className="mt-4 min-h-11 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <section className="max-w-sm rounded-3xl border border-border bg-card p-6">
-      <div className="flex items-start justify-between">
-        <h1 className="text-sm font-semibold text-muted-foreground">
-          Mumbai, India
-        </h1>
-      </div>
-      <p className="mt-2 text-7xl font-light tracking-tighter">
-        {Math.round(current.temperature_2m)}°</p>
-      <p className="mt-1 text-lg font-semibold">{describeWeather(current.weather_code)}</p>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Feels like {Math.round(current.apparent_temperature)}° · Humidity{" "}
-        {current.relative_humidity_2m}%
-      </p>
-    </section>
+    <div className="max-w-4xl space-y-8">
+      <OfflineBanner updatedAt={dataUpdatedAt} />
+      <WeatherHero location={location} data={data} unit={units.temp} />
+      <StatsRow data={data} speedUnit={units.speed} />
+      <HourlyStrip data={data} unit={units.temp} />
+    </div>
   );
 }
