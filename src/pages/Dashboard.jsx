@@ -1,36 +1,36 @@
-import { useEffect, useState } from "react";
-import { getWeather } from "../lib/api";
+import { useWeather } from "../hooks/useWeather";
+import { DEFAULT_LOCATION } from "../lib/location";
 import { describeWeather } from "../lib/weatherCodes";
 
 export default function Dashboard() {
-  const [weather, setWeather] = useState(null);
-  const [error, setError] = useState(null);
+  const { data, isPending, isError, error, refetch } = useWeather(DEFAULT_LOCATION);
 
-  useEffect(() => {
-    getWeather(19.076, 72.8777)
-    .then(setWeather)
-    .catch((err) => setError(err.message));
-  }, []);
+  if (isPending) return <p>Loading weather…</p>;
 
-  if (error) {
-    return <p role="alert">{error}</p>;
+  if (isError) {
+    return (
+      <div role="alert" className="max-w-sm rounded-2xl border border-border bg-card p-6">
+        <p className="font-semibold">{error.message}</p>
+        <button
+          onClick={() => refetch()}
+          className="mt-4 min-h-11 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
-  if (!weather) {
-    return <p>Loading weather…</p>;
-  }
-
-  const current = weather.current;
+  const current = data.current;
 
   return (
     <section className="max-w-sm rounded-3xl border border-border bg-card p-6">
-      <div className="flex items-start justify-between">
-        <h1 className="text-sm font-semibold text-muted-foreground">
-          Mumbai, India
-        </h1>
-      </div>
+      <h1 className="text-sm font-semibold text-muted-foreground">
+        {DEFAULT_LOCATION.name}, {DEFAULT_LOCATION.region}
+      </h1>
       <p className="mt-2 text-7xl font-light tracking-tighter">
-        {Math.round(current.temperature_2m)}°</p>
+        {Math.round(current.temperature_2m)}°
+      </p>
       <p className="mt-1 text-lg font-semibold">{describeWeather(current.weather_code)}</p>
       <p className="mt-1 text-sm text-muted-foreground">
         Feels like {Math.round(current.apparent_temperature)}° · Humidity{" "}
