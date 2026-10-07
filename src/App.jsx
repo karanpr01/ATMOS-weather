@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Placeholder from "./pages/Placeholder";
+import Forecast from "./pages/Forecast";
 
 export default function App() {
   return (
@@ -9,7 +10,7 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/forecast" element={<Placeholder title="Forecast" />} />
+          <Route path="/forecast" element={<Forecast/>} />
           <Route
             path="/locations"
             element={<Placeholder title="Locations" />}
