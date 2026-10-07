@@ -4,7 +4,7 @@ A fast, responsive weather app built with React, Tailwind CSS and Open-Meteo.
 Live conditions, hourly and 7-day forecasts, air quality, saved cities and a
 world map, with light and dark themes.
 
-> Status: in development (Day 1 of 5 complete).
+> Status: in development (Day 2 of 5 complete).
 
 ## Features (so far)
 - Live current weather for Mumbai from the Open-Meteo API
@@ -12,6 +12,9 @@ world map, with light and dark themes.
 - Light, dark and system themes that remember your choice
 - Loading and error states
 - Keyboard-friendly navigation with a skip link
+- Dashboard with hero, stats row and hourly forecast
+- °C / °F units that are remembered
+- Skeleton loading, error with retry, and offline states
 
 ## Tech stack
 - React + Vite
@@ -30,7 +33,7 @@ npm run dev
 
 ## Roadmap
 - [x] Day 1: setup, theme, layout, first live data
-- [ ] Day 2: dashboard, data layer
+- [x] Day 2: dashboard, data layer 
 - [ ] Day 3: forecast, hourly, details
 - [ ] Day 4: search, saved cities, air quality, settings
 - [ ] Day 5: map, motion, polish, deploy
