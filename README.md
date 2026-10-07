@@ -15,6 +15,9 @@ world map, with light and dark themes.
 - Dashboard with hero, stats row and hourly forecast
 - °C / °F units that are remembered
 - Skeleton loading, error with retry, and offline states
+- 7-day forecast with temperature range bars and day details
+- Hourly forecast with temperature curve and rain chance chart
+- Weather details: wind compass, UV scale, sun arc, pressure trend
 
 ## Tech stack
 - React + Vite
@@ -34,7 +37,7 @@ npm run dev
 ## Roadmap
 - [x] Day 1: setup, theme, layout, first live data
 - [x] Day 2: dashboard, data layer 
-- [ ] Day 3: forecast, hourly, details
+- [x] Day 3: forecast, hourly, details
 - [ ] Day 4: search, saved cities, air quality, settings
 - [ ] Day 5: map, motion, polish, deploy
 

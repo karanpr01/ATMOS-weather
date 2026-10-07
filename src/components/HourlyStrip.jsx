@@ -1,9 +1,12 @@
 import WeatherIcon from "./WeatherIcon";
 import { formatTemp } from "../lib/units";
+import { Link } from "react-router";
 
 export default function HourlyStrip({ data, unit }) {
   const { current, hourly, daily } = data;
-  const found = hourly.time.findIndex((t) => t.slice(0, 13) === current.time.slice(0, 13));
+  const found = hourly.time.findIndex(
+    (t) => t.slice(0, 13) === current.time.slice(0, 13),
+  );
   const start = Math.max(0, found);
   const sunrise = Number(daily.sunrise[0].slice(11, 13));
   const sunset = Number(daily.sunset[0].slice(11, 13));
@@ -13,7 +16,10 @@ export default function HourlyStrip({ data, unit }) {
     const hour = Number(time.slice(11, 13));
     return {
       time,
-      label: i === 0 ? "Now" : new Date(time).toLocaleTimeString([], { hour: "numeric" }),
+      label:
+        i === 0
+          ? "Now"
+          : new Date(time).toLocaleTimeString([], { hour: "numeric" }),
       code: hourly.weather_code[index],
       temp: hourly.temperature_2m[index],
       rain: hourly.precipitation_probability[index],
@@ -23,7 +29,17 @@ export default function HourlyStrip({ data, unit }) {
 
   return (
     <section aria-labelledby="hourly-title">
-      <h2 id="hourly-title" className="text-lg font-bold">Next hours</h2>
+      <div className="flex items-center justify-between">
+        <h2 id="hourly-title" className="text-lg font-bold">
+          Next hours
+        </h2>
+        <Link
+          to="/hourly"
+          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
+        >
+          See 24 hours
+        </Link>
+      </div>
       <div
         role="region"
         aria-label="Hourly forecast, scrolls sideways"
@@ -39,9 +55,16 @@ export default function HourlyStrip({ data, unit }) {
               }`}
             >
               <span className="text-muted-foreground">{item.label}</span>
-              <WeatherIcon code={item.code} isDay={item.isDay} className="size-6" />
+              <WeatherIcon
+                code={item.code}
+                isDay={item.isDay}
+                className="size-6"
+              />
               <span>{formatTemp(item.temp, unit)}°</span>
-              <span className="text-xs text-muted-foreground" aria-label={`${item.rain}% chance of rain`}>
+              <span
+                className="text-xs text-muted-foreground"
+                aria-label={`${item.rain}% chance of rain`}
+              >
                 {item.rain}%
               </span>
             </li>

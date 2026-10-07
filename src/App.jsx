@@ -1,16 +1,23 @@
+/* eslint-disable react-hooks/static-components */
 import { Routes, Route } from "react-router";
 import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Placeholder from "./pages/Placeholder";
 import Forecast from "./pages/Forecast";
+import Details from "./pages/Details";
+import { lazy } from "react";
 
 export default function App() {
+  const Hourly = lazy(() => import("./pages/Hourly"));
+
   return (
     <main className="min-h-screen p-8">
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/forecast" element={<Forecast/>} />
+          <Route path="/forecast" element={<Forecast />} />
+          <Route path="hourly" element={<Hourly />} />
+          <Route path="details" element={<Details />} />
           <Route
             path="/locations"
             element={<Placeholder title="Locations" />}

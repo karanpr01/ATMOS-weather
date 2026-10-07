@@ -6,15 +6,26 @@ import StatsRow from "../components/StatsRow";
 import HourlyStrip from "../components/HourlyStrip";
 import DashboardSkeleton from "../components/DashboardSkeleton";
 import OfflineBanner from "../components/OfflineBanner";
+import { Link } from "react-router";
 
 export default function Dashboard() {
   const { location, units } = useSettings();
-  const { data, isPending, isError, error, refetch, fetchStatus, dataUpdatedAt } =
-    useWeather(location);
+  const {
+    data,
+    isPending,
+    isError,
+    error,
+    refetch,
+    fetchStatus,
+    dataUpdatedAt,
+  } = useWeather(location);
 
   if (isPending && fetchStatus === "paused") {
     return (
-      <div role="status" className="max-w-md rounded-2xl border border-border bg-card p-6">
+      <div
+        role="status"
+        className="max-w-md rounded-2xl border border-border bg-card p-6"
+      >
         <WifiOff className="size-6 text-muted-foreground" aria-hidden="true" />
         <p className="mt-3 font-semibold">You're offline.</p>
         <p className="text-sm text-muted-foreground">
@@ -28,7 +39,10 @@ export default function Dashboard() {
 
   if (isError) {
     return (
-      <div role="alert" className="max-w-md rounded-2xl border border-border bg-card p-6">
+      <div
+        role="alert"
+        className="max-w-md rounded-2xl border border-border bg-card p-6"
+      >
         <p className="font-semibold">{error.message}</p>
         <button
           onClick={() => refetch()}
@@ -45,6 +59,12 @@ export default function Dashboard() {
       <OfflineBanner updatedAt={dataUpdatedAt} />
       <WeatherHero location={location} data={data} unit={units.temp} />
       <StatsRow data={data} speedUnit={units.speed} />
+      <Link
+        to="/details"
+        className="inline-flex min-h-11 items-center text-sm font-semibold underline md:hidden"
+      >
+        All weather details
+      </Link>
       <HourlyStrip data={data} unit={units.temp} />
     </div>
   );
