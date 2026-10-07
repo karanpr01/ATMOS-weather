@@ -3,14 +3,18 @@ import Layout from "./pages/Layout";
 import Dashboard from "./pages/Dashboard";
 import Placeholder from "./pages/Placeholder";
 import Forecast from "./pages/Forecast";
+import { lazy } from "react";
 
 export default function App() {
+  const Hourly = lazy(() => import("./pages/Hourly"));
+
   return (
     <main className="min-h-screen p-8">
       <Routes>
         <Route element={<Layout />}>
+          <Route path="hourly" element={<Hourly />} />
           <Route path="/" element={<Dashboard />} />
-          <Route path="/forecast" element={<Forecast/>} />
+          <Route path="/forecast" element={<Forecast />} />
           <Route
             path="/locations"
             element={<Placeholder title="Locations" />}

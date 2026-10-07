@@ -3,6 +3,7 @@ import { CloudSun } from "lucide-react";
 import { navItems } from "../lib/nav";
 import ThemeToggle from "../components/ThemeToggle";
 import UnitSwitch from "../components/UnitSwitch";
+import { Suspense } from "react";
 
 const desktopLink = ({ isActive }) =>
   `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${
@@ -10,11 +11,6 @@ const desktopLink = ({ isActive }) =>
       ? "bg-active text-foreground"
       : "text-muted-foreground hover:bg-muted"
   }`;
-
-// const mobileLink = ({ isActive }) =>
-//   `flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold ${
-//     isActive ? "text-primary" : "text-muted-foreground"
-//   }`;
 
 const mobileLink =
   "flex min-h-14 min-w-16 flex-col items-center justify-center gap-1 rounded-xl text-[11px] transition-colors active:scale-95";
@@ -56,7 +52,9 @@ export default function Layout() {
           </div>
         </header>
         <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
-          <Outlet />
+          <Suspense fallback={<p role="status" className="text-muted-foreground">Loading…</p>}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 
