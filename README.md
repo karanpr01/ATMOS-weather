@@ -1,16 +1,37 @@
-# React + Vite
+# ATMOS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fast, responsive weather app built with React, Tailwind CSS and Open-Meteo.
+Live conditions, hourly and 7-day forecasts, air quality, saved cities and a
+world map, with light and dark themes.
 
-Currently, two official plugins are available:
+> Status: in development (Day 1 of 5 complete).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features (so far)
+- Live current weather for Mumbai from the Open-Meteo API
+- Responsive layout: sidebar on desktop, bottom navigation on mobile
+- Light, dark and system themes that remember your choice
+- Loading and error states
+- Keyboard-friendly navigation with a skip link
 
-## React Compiler
+## Tech stack
+- React + Vite
+- Tailwind CSS v4
+- React Router
+- Open-Meteo API (free, no key needed)
+- Lucide icons, Fontsource (Manrope)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Run it locally
+```bash
+git clone https://github.com/YOUR-USERNAME/atmos-weather.git
+cd atmos-weather
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+## Roadmap
+- [x] Day 1: setup, theme, layout, first live data
+- [ ] Day 2: dashboard, data layer
+- [ ] Day 3: forecast, hourly, details
+- [ ] Day 4: search, saved cities, air quality, settings
+- [ ] Day 5: map, motion, polish, deploy
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
