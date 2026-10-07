@@ -1,13 +1,28 @@
+import { WifiOff } from "lucide-react";
 import { useSettings } from "../context/settings-context";
 import { useWeather } from "../hooks/useWeather";
 import WeatherHero from "../components/WeatherHero";
 import StatsRow from "../components/StatsRow";
 import HourlyStrip from "../components/HourlyStrip";
 import DashboardSkeleton from "../components/DashboardSkeleton";
+import OfflineBanner from "../components/OfflineBanner";
 
 export default function Dashboard() {
   const { location, units } = useSettings();
-  const { data, isPending, isError, error, refetch } = useWeather(location);
+  const { data, isPending, isError, error, refetch, fetchStatus, dataUpdatedAt } =
+    useWeather(location);
+
+  if (isPending && fetchStatus === "paused") {
+    return (
+      <div role="status" className="max-w-md rounded-2xl border border-border bg-card p-6">
+        <WifiOff className="size-6 text-muted-foreground" aria-hidden="true" />
+        <p className="mt-3 font-semibold">You're offline.</p>
+        <p className="text-sm text-muted-foreground">
+          Connect to the internet and the weather will load by itself.
+        </p>
+      </div>
+    );
+  }
 
   if (isPending) return <DashboardSkeleton />;
 
@@ -27,6 +42,7 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl space-y-8">
+      <OfflineBanner updatedAt={dataUpdatedAt} />
       <WeatherHero location={location} data={data} unit={units.temp} />
       <StatsRow data={data} speedUnit={units.speed} />
       <HourlyStrip data={data} unit={units.temp} />
