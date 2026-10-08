@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Check, MapPin, Plus, Search as SearchIcon, SearchX, WifiOff } from "lucide-react";
+import {
+  Check,
+  LocateFixed,
+  MapPin,
+  Plus,
+  Search as SearchIcon,
+  SearchX,
+  WifiOff,
+} from "lucide-react";
 import { useSettings } from "../context/settings-context";
 import { useDebounce } from "../hooks/useDebounce";
 import { searchCities } from "../lib/geocoding";
@@ -13,6 +21,29 @@ export default function Search() {
   const enabled = query.length >= 2;
   const { setLocation, saved, addSaved, removeSaved } = useSettings();
   const navigate = useNavigate();
+
+  const [geo, setGeo] = useState("idle"); // idle | loading | denied | error
+
+  const useMyLocation = () => {
+    if (!("geolocation" in navigator)) {
+      setGeo("error");
+      return;
+    }
+    setGeo("loading");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setLocation({
+          name: "Current location",
+          region: `${coords.latitude.toFixed(2)}°, ${coords.longitude.toFixed(2)}°`,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
+        navigate("/");
+      },
+      (err) => setGeo(err.code === 1 ? "denied" : "error"),
+      { timeout: 10000, maximumAge: 10 * 60 * 1000 },
+    );
+  };
 
   const { data, isFetching, isError, refetch } = useQuery({
     queryKey: ["geocode", query],
@@ -34,23 +65,33 @@ export default function Search() {
   let body;
   if (!enabled) {
     body = (
-      <p className="text-muted-foreground">Type at least 2 letters to search for a city.</p>
+      <p className="text-muted-foreground">
+        Type at least 2 letters to search for a city.
+      </p>
     );
   } else if (isFetching && !data) {
     body = (
       <div role="status" className="space-y-2">
         <span className="sr-only">Searching…</span>
         {[1, 2, 3].map((n) => (
-          <div key={n} className="h-16 animate-pulse rounded-2xl bg-muted motion-reduce:animate-none" />
+          <div
+            key={n}
+            className="h-16 animate-pulse rounded-2xl bg-muted motion-reduce:animate-none"
+          />
         ))}
       </div>
     );
   } else if (isError) {
     body = (
-      <div role="alert" className="rounded-2xl border border-border bg-card p-6">
+      <div
+        role="alert"
+        className="rounded-2xl border border-border bg-card p-6"
+      >
         <WifiOff className="size-6 text-muted-foreground" aria-hidden="true" />
         <p className="mt-2 font-semibold">We couldn't load weather data.</p>
-        <p className="text-sm text-muted-foreground">Check your connection and try again.</p>
+        <p className="text-sm text-muted-foreground">
+          Check your connection and try again.
+        </p>
         <button
           onClick={() => refetch()}
           className="mt-4 min-h-11 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
@@ -62,65 +103,80 @@ export default function Search() {
   } else if (data?.length === 0) {
     body = (
       <div className="rounded-2xl border border-dashed border-border p-8 text-center">
-        <SearchX className="mx-auto size-8 text-muted-foreground" aria-hidden="true" />
+        <SearchX
+          className="mx-auto size-8 text-muted-foreground"
+          aria-hidden="true"
+        />
         <p className="mt-2 font-semibold">No matching locations found.</p>
-        <p className="text-sm text-muted-foreground">Check the spelling or try a nearby city.</p>
+        <p className="text-sm text-muted-foreground">
+          Check the spelling or try a nearby city.
+        </p>
       </div>
     );
-  }  else if (data) {
-  body = (
-    <ul className="space-y-2">
-      {data.map((city) => {
-        const loc = {
-          name: city.name,
-          region: city.region,
-          latitude: city.latitude,
-          longitude: city.longitude,
-        };
-        const isSaved = saved.some((l) => locKey(l) === locKey(loc));
+  } else if (data) {
+    body = (
+      <ul className="space-y-2">
+        {data.map((city) => {
+          const loc = {
+            name: city.name,
+            region: city.region,
+            latitude: city.latitude,
+            longitude: city.longitude,
+          };
+          const isSaved = saved.some((l) => locKey(l) === locKey(loc));
 
-        return (
-          <li
-            key={city.id}
-            className="flex items-center gap-1 rounded-2xl border border-border bg-card pr-2"
-          >
-            <button
-              onClick={() => choose(city)}
-              className="flex min-h-14 flex-1 items-center gap-3 rounded-2xl px-4 py-3 text-left hover:bg-muted"
+          return (
+            <li
+              key={city.id}
+              className="flex items-center gap-1 rounded-2xl border border-border bg-card pr-2"
             >
-              <MapPin className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-              <span>
-                <span className="block font-bold">{city.name}</span>
-                <span className="block text-sm text-muted-foreground">{city.region}</span>
-              </span>
-            </button>
-            <button
-              onClick={() => (isSaved ? removeSaved(loc) : addSaved(loc))}
-              aria-pressed={isSaved}
-              aria-label={`Save ${city.name}, ${city.region}`}
-              className="grid size-11 shrink-0 place-items-center rounded-full border border-border hover:bg-muted"
-            >
-              {isSaved ? (
-                <Check className="size-5" aria-hidden="true" />
-              ) : (
-                <Plus className="size-5" aria-hidden="true" />
-              )}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
+              <button
+                onClick={() => choose(city)}
+                className="flex min-h-14 flex-1 items-center gap-3 rounded-2xl px-4 py-3 text-left hover:bg-muted"
+              >
+                <MapPin
+                  className="size-5 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <span>
+                  <span className="block font-bold">{city.name}</span>
+                  <span className="block text-sm text-muted-foreground">
+                    {city.region}
+                  </span>
+                </span>
+              </button>
+              <button
+                onClick={() => (isSaved ? removeSaved(loc) : addSaved(loc))}
+                aria-pressed={isSaved}
+                aria-label={`Save ${city.name}, ${city.region}`}
+                className="grid size-11 shrink-0 place-items-center rounded-full border border-border hover:bg-muted"
+              >
+                {isSaved ? (
+                  <Check className="size-5" aria-hidden="true" />
+                ) : (
+                  <Plus className="size-5" aria-hidden="true" />
+                )}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
 
   return (
     <div className="max-w-xl space-y-6">
       <h1 className="text-3xl font-bold">Search city</h1>
 
       <div>
-        <label htmlFor="city-search" className="sr-only">Search city</label>
+        <label htmlFor="city-search" className="sr-only">
+          Search city
+        </label>
         <div className="flex items-center gap-3 rounded-full border border-border bg-card px-4 focus-within:border-primary">
-          <SearchIcon className="size-5 text-muted-foreground" aria-hidden="true" />
+          <SearchIcon
+            className="size-5 text-muted-foreground"
+            aria-hidden="true"
+          />
           <input
             id="city-search"
             type="search"
@@ -133,6 +189,42 @@ export default function Search() {
           />
         </div>
       </div>
+
+      <div>
+        <button
+          onClick={useMyLocation}
+          disabled={geo === "loading"}
+          className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 text-sm font-semibold hover:bg-muted disabled:opacity-60"
+        >
+          <LocateFixed className="size-4" aria-hidden="true" />
+          {geo === "loading" ? "Finding you…" : "Use current location"}
+        </button>
+      </div>
+
+      {geo === "denied" && (
+        <div
+          role="alert"
+          className="rounded-2xl border border-border bg-card p-5"
+        >
+          <p className="font-semibold">Location access is unavailable.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            You blocked location for this site. Search for a city instead, or
+            allow location in your browser's site settings and try again.
+          </p>
+        </div>
+      )}
+
+      {geo === "error" && (
+        <div
+          role="alert"
+          className="rounded-2xl border border-border bg-card p-5"
+        >
+          <p className="font-semibold">We couldn't find your location.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Check your connection or search for a city instead.
+          </p>
+        </div>
+      )}
 
       <p aria-live="polite" className="sr-only">
         {data ? `${data.length} results found` : ""}
