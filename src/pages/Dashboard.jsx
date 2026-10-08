@@ -6,7 +6,11 @@ import StatsRow from "../components/StatsRow";
 import HourlyStrip from "../components/HourlyStrip";
 import DashboardSkeleton from "../components/DashboardSkeleton";
 import OfflineBanner from "../components/OfflineBanner";
+import ErrorCard from "../components/ErrorCard";
 import { Link } from "react-router";
+
+const linkClass =
+  "inline-flex min-h-11 items-center text-sm font-semibold underline";
 
 export default function Dashboard() {
   const { location, units } = useSettings();
@@ -59,18 +63,15 @@ export default function Dashboard() {
       <OfflineBanner updatedAt={dataUpdatedAt} />
       <WeatherHero location={location} data={data} unit={units.temp} />
       <StatsRow data={data} speedUnit={units.speed} />
-      <nav aria-label="More weather" className="flex flex-wrap gap-x-6">
-        <Link
-          to="/details"
-          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
-        >
+      <nav aria-label="More weather" className="flex flex-wrap gap-x-6 md:hidden">
+        <Link to="/details" className={linkClass}>
           All weather details
         </Link>
-        <Link
-          to="/air-quality"
-          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
-        >
+        <Link to="/air-quality" className={linkClass}>
           Air quality
+        </Link>
+        <Link to="/alerts" className={linkClass}>
+          Weather alerts
         </Link>
       </nav>
       <HourlyStrip data={data} unit={units.temp} />

@@ -1,19 +1,20 @@
-import { NavLink, Outlet, Link } from "react-router";
+import { Suspense } from "react";
+import { Link, NavLink, Outlet } from "react-router";
 import { CloudSun, Search } from "lucide-react";
 import { navItems } from "../lib/nav";
 import ThemeToggle from "../components/ThemeToggle";
 import UnitSwitch from "../components/UnitSwitch";
-import { Suspense } from "react";
+import AlertsBell from "../components/AlertsBell";
 
 const desktopLink = ({ isActive }) =>
   `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${
-    isActive
-      ? "bg-active text-foreground"
-      : "text-muted-foreground hover:bg-muted"
+    isActive ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted"
   }`;
 
-const mobileLink =
-  "flex min-h-14 min-w-16 flex-col items-center justify-center gap-1 rounded-xl text-[11px] transition-colors active:scale-95";
+const mobileLink = ({ isActive }) =>
+  `flex min-h-11 min-w-14 flex-col items-center justify-center gap-0.5 rounded-lg text-[11px] font-semibold ${
+    isActive ? "text-primary" : "text-muted-foreground"
+  }`;
 
 export default function Layout() {
   return (
@@ -54,18 +55,14 @@ export default function Layout() {
             >
               <Search className="size-5" aria-hidden="true" />
             </Link>
+            <AlertsBell />
             <UnitSwitch />
             <ThemeToggle />
           </div>
         </header>
+
         <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
-          <Suspense
-            fallback={
-              <p role="status" className="text-muted-foreground">
-                Loading…
-              </p>
-            }
-          >
+          <Suspense fallback={<p role="status" className="text-muted-foreground">Loading…</p>}>
             <Outlet />
           </Suspense>
         </main>
@@ -75,38 +72,12 @@ export default function Layout() {
         aria-label="Mobile"
         className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-t border-border bg-card px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden"
       >
-        {navItems
-          .filter((n) => n.mobile)
-          .map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} end={to === "/"} className={mobileLink}>
-              {({ isActive }) => (
-                <>
-                  <span
-                    className={`grid h-8 w-14 place-items-center rounded-full transition-colors duration-200 ${
-                      isActive
-                        ? "bg-active text-primary"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    <Icon
-                      className="size-5"
-                      strokeWidth={isActive ? 2.5 : 1.75}
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span
-                    className={
-                      isActive
-                        ? "font-bold text-foreground"
-                        : "font-medium text-muted-foreground"
-                    }
-                  >
-                    {label}
-                  </span>
-                </>
-              )}
-            </NavLink>
-          ))}
+        {navItems.filter((n) => n.mobile).map(({ to, label, icon: Icon }) => (
+          <NavLink key={to} to={to} end={to === "/"} className={mobileLink}>
+            <Icon className="size-5" aria-hidden="true" />
+            {label}
+          </NavLink>
+        ))}
       </nav>
     </div>
   );
