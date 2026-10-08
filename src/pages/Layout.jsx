@@ -1,5 +1,5 @@
-import { NavLink, Outlet } from "react-router";
-import { CloudSun } from "lucide-react";
+import { NavLink, Outlet, Link } from "react-router";
+import { CloudSun, Search } from "lucide-react";
 import { navItems } from "../lib/nav";
 import ThemeToggle from "../components/ThemeToggle";
 import UnitSwitch from "../components/UnitSwitch";
@@ -47,12 +47,25 @@ export default function Layout() {
             ATMOS
           </div>
           <div className="flex items-center gap-2">
+            <Link
+              to="/search"
+              aria-label="Search city"
+              className="grid size-11 place-items-center rounded-full border border-border bg-card text-muted-foreground hover:text-foreground"
+            >
+              <Search className="size-5" aria-hidden="true" />
+            </Link>
             <UnitSwitch />
             <ThemeToggle />
           </div>
         </header>
         <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
-          <Suspense fallback={<p role="status" className="text-muted-foreground">Loading…</p>}>
+          <Suspense
+            fallback={
+              <p role="status" className="text-muted-foreground">
+                Loading…
+              </p>
+            }
+          >
             <Outlet />
           </Suspense>
         </main>
