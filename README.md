@@ -18,6 +18,11 @@ world map, with light and dark themes.
 - 7-day forecast with temperature range bars and day details
 - Hourly forecast with temperature curve and rain chance chart
 - Weather details: wind compass, UV scale, sun arc, pressure trend
+- City search with debounce, saved locations and a default city
+- Use current location, with a permission-denied state
+- Air quality screen with AQI scale and pollutants
+- Generated weather alerts with clear severity labels
+- Settings: theme, units, notification preferences and accessibility options
 
 ## Tech stack
 - React + Vite
@@ -35,9 +40,9 @@ npm run dev
 ```
 
 ## Roadmap
-- [x] Day 1: setup, theme, layout, first live data
-- [x] Day 2: dashboard, data layer 
-- [x] Day 3: forecast, hourly, details
-- [ ] Day 4: search, saved cities, air quality, settings
+- [X] Day 1: setup, theme, layout, first live data
+- [X] Day 2: dashboard, data layer 
+- [X] Day 3: forecast, hourly, details
+- [X] Day 4: search, saved cities, air quality, settings
 - [ ] Day 5: map, motion, polish, deploy
 
