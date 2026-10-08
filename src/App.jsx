@@ -10,10 +10,12 @@ import Locations from "./pages/Locations.jsx";
 import AirQuality from "./pages/AirQuality.jsx";
 import Alerts from "./pages/Alerts.jsx";
 import Settings from "./pages/Settings.jsx";
+import WorldMap from "./pages/WorldMap";
 import { lazy } from "react";
 
 export default function App() {
   const Hourly = lazy(() => import("./pages/Hourly"));
+  const WorldMap = lazy(() => import("./pages/WorldMap"));
 
   return (
     <main className="min-h-screen p-8">
@@ -31,7 +33,7 @@ export default function App() {
 
           <Route path="locations" element={<Locations />} />
 
-          <Route path="/map" element={<Placeholder title="Map" />} />
+          <Route path="map" element={<WorldMap />} />
 
           <Route path="air-quality" element={<AirQuality />} />
 
