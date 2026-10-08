@@ -4,3 +4,6 @@ export const DEFAULT_LOCATION = {
   latitude: 19.076,
   longitude: 72.8777,
 };
+
+export const locKey = (loc) =>
+  `${loc.latitude.toFixed(2)},${loc.longitude.toFixed(2)}`;

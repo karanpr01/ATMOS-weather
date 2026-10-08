@@ -6,6 +6,7 @@ import Placeholder from "./pages/Placeholder";
 import Forecast from "./pages/Forecast";
 import Details from "./pages/Details";
 import Search from "./pages/Search";
+import Locations from "./pages/Locations.jsx";
 import { lazy } from "react";
 
 export default function App() {
@@ -16,14 +17,17 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
+
           <Route path="/forecast" element={<Forecast />} />
+
           <Route path="hourly" element={<Hourly />} />
+
           <Route path="details" element={<Details />} />
+
           <Route path="search" element={<Search />} />
-          <Route
-            path="/locations"
-            element={<Placeholder title="Locations" />}
-          />
+
+          <Route path="locations" element={<Locations />} />
+
           <Route path="/map" element={<Placeholder title="Map" />} />
           <Route
             path="/air-quality"
