@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { MapPin, Search as SearchIcon, SearchX, WifiOff } from "lucide-react";
+import { Check, MapPin, Plus, Search as SearchIcon, SearchX, WifiOff } from "lucide-react";
 import { useSettings } from "../context/settings-context";
 import { useDebounce } from "../hooks/useDebounce";
 import { searchCities } from "../lib/geocoding";
+import { locKey } from "../lib/location";
 
 export default function Search() {
   const [text, setText] = useState("");
   const query = useDebounce(text).trim();
   const enabled = query.length >= 2;
-  const { setLocation } = useSettings();
+  const { setLocation, saved, addSaved, removeSaved } = useSettings();
   const navigate = useNavigate();
 
   const { data, isFetching, isError, refetch } = useQuery({
@@ -66,14 +67,26 @@ export default function Search() {
         <p className="text-sm text-muted-foreground">Check the spelling or try a nearby city.</p>
       </div>
     );
-  } else if (data) {
-    body = (
-      <ul className="space-y-2">
-        {data.map((city) => (
-          <li key={city.id}>
+  }  else if (data) {
+  body = (
+    <ul className="space-y-2">
+      {data.map((city) => {
+        const loc = {
+          name: city.name,
+          region: city.region,
+          latitude: city.latitude,
+          longitude: city.longitude,
+        };
+        const isSaved = saved.some((l) => locKey(l) === locKey(loc));
+
+        return (
+          <li
+            key={city.id}
+            className="flex items-center gap-1 rounded-2xl border border-border bg-card pr-2"
+          >
             <button
               onClick={() => choose(city)}
-              className="flex min-h-14 w-full items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-left transition-colors hover:bg-muted"
+              className="flex min-h-14 flex-1 items-center gap-3 rounded-2xl px-4 py-3 text-left hover:bg-muted"
             >
               <MapPin className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
               <span>
@@ -81,11 +94,24 @@ export default function Search() {
                 <span className="block text-sm text-muted-foreground">{city.region}</span>
               </span>
             </button>
+            <button
+              onClick={() => (isSaved ? removeSaved(loc) : addSaved(loc))}
+              aria-pressed={isSaved}
+              aria-label={`Save ${city.name}, ${city.region}`}
+              className="grid size-11 shrink-0 place-items-center rounded-full border border-border hover:bg-muted"
+            >
+              {isSaved ? (
+                <Check className="size-5" aria-hidden="true" />
+              ) : (
+                <Plus className="size-5" aria-hidden="true" />
+              )}
+            </button>
           </li>
-        ))}
-      </ul>
-    );
-  }
+        );
+      })}
+    </ul>
+  );
+}
 
   return (
     <div className="max-w-xl space-y-6">
