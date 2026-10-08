@@ -76,6 +76,21 @@ body {
   stroke-dashoffset: 1;
   animation: draw 1s ease forwards;
 }
+
+.large-text {
+  font-size: 112.5%;
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.reduce-motion .draw {
+  stroke-dashoffset: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .draw { animation: none; stroke-dashoffset: 0; }
 }
