@@ -7,6 +7,7 @@ import Forecast from "./pages/Forecast";
 import Details from "./pages/Details";
 import Search from "./pages/Search";
 import Locations from "./pages/Locations.jsx";
+import AirQuality from "./pages/AirQuality.jsx";
 import { lazy } from "react";
 
 export default function App() {
@@ -29,11 +30,11 @@ export default function App() {
           <Route path="locations" element={<Locations />} />
 
           <Route path="/map" element={<Placeholder title="Map" />} />
-          <Route
-            path="/air-quality"
-            element={<Placeholder title="Air Quality" />}
-          />
+
+          <Route path="air-quality" element={<AirQuality />} />
+
           <Route path="/settings" element={<Placeholder title="Settings" />} />
+          
           <Route path="*" element={<Placeholder title="Page Not Found" />} />
         </Route>
       </Routes>

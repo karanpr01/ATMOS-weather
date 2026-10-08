@@ -59,12 +59,20 @@ export default function Dashboard() {
       <OfflineBanner updatedAt={dataUpdatedAt} />
       <WeatherHero location={location} data={data} unit={units.temp} />
       <StatsRow data={data} speedUnit={units.speed} />
-      <Link
-        to="/details"
-        className="inline-flex min-h-11 items-center text-sm font-semibold underline md:hidden"
-      >
-        All weather details
-      </Link>
+      <nav aria-label="More weather" className="flex flex-wrap gap-x-6">
+        <Link
+          to="/details"
+          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
+        >
+          All weather details
+        </Link>
+        <Link
+          to="/air-quality"
+          className="inline-flex min-h-11 items-center text-sm font-semibold underline"
+        >
+          Air quality
+        </Link>
+      </nav>
       <HourlyStrip data={data} unit={units.temp} />
     </div>
   );
