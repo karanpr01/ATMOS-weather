@@ -18,3 +18,18 @@ export async function getWeather(latitude, longitude) {
   if (!response.ok) throw new Error("We couldn't load weather data.");
   return response.json();
 }
+
+export async function getAirQuality(latitude, longitude) {
+  const params = new URLSearchParams({
+    latitude,
+    longitude,
+    current: "us_aqi,pm2_5,pm10,ozone,nitrogen_dioxide",
+    hourly: "us_aqi",
+    forecast_days: 1,
+    timezone: "auto",
+  });
+
+  const response = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?${params}`);
+  if (!response.ok) throw new Error("We couldn't load air quality data.");
+  return response.json();
+}
