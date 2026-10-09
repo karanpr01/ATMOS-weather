@@ -33,3 +33,20 @@ export async function getAirQuality(latitude, longitude) {
   if (!response.ok) throw new Error("We couldn't load air quality data.");
   return response.json();
 }
+
+export async function getMapWeather(cities) {
+  const params = new URLSearchParams({
+    latitude: cities.map((c) => c.latitude).join(","),
+    longitude: cities.map((c) => c.longitude).join(","),
+    current: "temperature_2m,weather_code,is_day",
+    daily: "precipitation_probability_max",
+    forecast_days: 1,
+    timezone: "auto",
+  });
+
+  const response = await fetch(`${BASE_URL}?${params}`);
+  if (!response.ok) throw new Error("We couldn't load weather data.");
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [data];
+}
