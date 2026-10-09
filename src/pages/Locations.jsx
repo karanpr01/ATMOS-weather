@@ -50,7 +50,7 @@ export default function Locations() {
             return (
               <li
                 key={locKey(loc)}
-                className="flex items-center gap-1 rounded-2xl border border-border bg-card pr-2"
+                className="flex items-center gap-1 rounded-2xl border border-border bg-card pr-2 transition-transform duration-200 hover:-translate-y-0.5"
               >
                 <button
                   onClick={() => {
