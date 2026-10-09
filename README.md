@@ -2,47 +2,79 @@
 
 A fast, responsive weather app built with React, Tailwind CSS and Open-Meteo.
 Live conditions, hourly and 7-day forecasts, air quality, saved cities and a
-world map, with light and dark themes.
+world weather map, with light and dark themes.
 
-> Status: in development (Day 2 of 5 complete).
+**Live demo:** https://atmos-weather-in.vercel.app/
 
-## Features (so far)
-- Live current weather for Mumbai from the Open-Meteo API
-- Responsive layout: sidebar on desktop, bottom navigation on mobile
-- Light, dark and system themes that remember your choice
-- Loading and error states
-- Keyboard-friendly navigation with a skip link
-- Dashboard with hero, stats row and hourly forecast
-- °C / °F units that are remembered
-- Skeleton loading, error with retry, and offline states
-- 7-day forecast with temperature range bars and day details
-- Hourly forecast with temperature curve and rain chance chart
-- Weather details: wind compass, UV scale, sun arc, pressure trend
-- City search with debounce, saved locations and a default city
-- Use current location, with a permission-denied state
-- Air quality screen with AQI scale and pollutants
+![ATMOS dashboard in dark mode](docs/screenshots/dashboard-dark.png)
+
+| Forecast (light) | Mobile | World map |
+|---|---|---|
+| ![Forecast in light mode](docs/screenshots/forecast-light.png) | ![Mobile dashboard](docs/screenshots/mobile-dashboard.png) | ![World weather map](docs/screenshots/map-dark.png) |
+
+## Features
+- Live current weather, with feels-like, wind, humidity, UV and rain chance
+- Hourly forecast with a temperature curve and rain-chance chart
+- 7-day forecast with temperature range bars and per-day details
+- Weather details: wind compass, UV scale, sun arc and pressure trend
+- Air quality with an AQI scale and the main pollutants
+- City search (debounced), saved locations and a default city
+- Use current location, with a clear permission-denied state
+- World weather map with temperature markers and a popup
 - Generated weather alerts with clear severity labels
 - Settings: theme, units, notification preferences and accessibility options
+- Light, dark and system themes; °C/°F, km/h/mph and hPa/inHg units
+- Loading skeletons, error with retry, and offline states
 
 ## Tech stack
 - React + Vite
 - Tailwind CSS v4
 - React Router
-- Open-Meteo API (free, no key needed)
-- Lucide icons, Fontsource (Manrope)
+- TanStack Query (data fetching and caching)
+- Recharts (charts) and Leaflet (map), both lazy-loaded
+- Open-Meteo APIs: forecast, geocoding and air quality (free, no API key)
+- Lucide icons and Manrope (self-hosted with Fontsource)
+
+## Accessibility and performance
+- Keyboard friendly, with a skip link and visible focus outlines
+- Meaning is never carried by colour alone (labels, icons and text)
+- Respects `prefers-reduced-motion`, plus an in-app Reduce motion option
+- Charts and the map have text alternatives
+- Lighthouse (mobile): see the table below
+
+| Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|
+| 98 | 100 | 100 | 91 |
+
+![LightHouse Score](docs/screenshots/LightHouse%20Score.png)
 
 ## Run it locally
 ```bash
-git clone https://github.com/YOUR-USERNAME/atmos-weather.git
+git clone https://github.com/karanpr01/ATMOS-weather.git
 cd atmos-weather
 npm install
 npm run dev
 ```
 
-## Roadmap
-- [X] Day 1: setup, theme, layout, first live data
-- [X] Day 2: dashboard, data layer 
-- [X] Day 3: forecast, hourly, details
-- [X] Day 4: search, saved cities, air quality, settings
-- [ ] Day 5: map, motion, polish, deploy
+Build for production with `npm run build` and preview it with `npm run preview`.
+
+## Project structure
+```
+src/
+  components/   reusable UI (hero, stats, skeletons, toggles…)
+  context/      shared settings (theme, units, saved cities)
+  hooks/        useWeather, useAirQuality, useDebounce, useLocalStorage…
+  lib/          API calls, unit helpers, alert rules, AQI scale
+  pages/        one file per screen
+```
+
+## Known limitations
+- Alerts are generated from forecast rules for this project. They are **not**
+  official warnings.
+- Notification switches save your choice, but notifications are not sent yet.
+- "Current location" shows coordinates, because the free API has no reverse lookup.
+
+## Credits
+- Weather data by [Open-Meteo.com](https://open-meteo.com/)
+- Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
 
