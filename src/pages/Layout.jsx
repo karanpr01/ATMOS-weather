@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Link, NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { CloudSun, Search } from "lucide-react";
 import { navItems } from "../lib/nav";
 import ThemeToggle from "../components/ThemeToggle";
@@ -8,7 +8,9 @@ import AlertsBell from "../components/AlertsBell";
 
 const desktopLink = ({ isActive }) =>
   `flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors ${
-    isActive ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted"
+    isActive
+      ? "bg-muted text-foreground"
+      : "text-muted-foreground hover:bg-muted"
   }`;
 
 const mobileLink = ({ isActive }) =>
@@ -17,6 +19,8 @@ const mobileLink = ({ isActive }) =>
   }`;
 
 export default function Layout() {
+  const { pathname } = useLocation();
+
   return (
     <div className="min-h-screen md:flex">
       <a
@@ -62,8 +66,16 @@ export default function Layout() {
         </header>
 
         <main id="main" className="px-4 pb-28 md:px-9 md:pb-10">
-          <Suspense fallback={<p role="status" className="text-muted-foreground">Loading…</p>}>
-            <Outlet />
+          <Suspense
+            fallback={
+              <p role="status" className="text-muted-foreground">
+                Loading…
+              </p>
+            }
+          >
+            <div key={pathname} className="page-in">
+              <Outlet />
+            </div>
           </Suspense>
         </main>
       </div>
@@ -72,12 +84,14 @@ export default function Layout() {
         aria-label="Mobile"
         className="fixed inset-x-0 bottom-0 z-10 flex justify-around border-t border-border bg-card px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden"
       >
-        {navItems.filter((n) => n.mobile).map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} end={to === "/"} className={mobileLink}>
-            <Icon className="size-5" aria-hidden="true" />
-            {label}
-          </NavLink>
-        ))}
+        {navItems
+          .filter((n) => n.mobile)
+          .map(({ to, label, icon: Icon }) => (
+            <NavLink key={to} to={to} end={to === "/"} className={mobileLink}>
+              <Icon className="size-5" aria-hidden="true" />
+              {label}
+            </NavLink>
+          ))}
       </nav>
     </div>
   );

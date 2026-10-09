@@ -10,7 +10,10 @@ export default function SettingsProvider({ children }) {
     pressure: "hpa",
   });
   const [saved, setSaved] = useLocalStorage("atmos-saved", []);
-  const [defaultLocation, setDefaultLocation] = useLocalStorage("atmos-default", DEFAULT_LOCATION);
+  const [defaultLocation, setDefaultLocation] = useLocalStorage(
+    "atmos-default",
+    DEFAULT_LOCATION,
+  );
   const [location, setLocation] = useState(defaultLocation);
 
   const [theme, setTheme] = useLocalStorage("atmos-theme-pref", "system");
@@ -43,20 +46,55 @@ export default function SettingsProvider({ children }) {
 
   const value = useMemo(() => {
     const addSaved = (loc) =>
-      setSaved((list) => (list.some((l) => locKey(l) === locKey(loc)) ? list : [...list, loc]));
+      setSaved((list) =>
+        list.some((l) => locKey(l) === locKey(loc)) ? list : [...list, loc],
+      );
     const removeSaved = (loc) =>
       setSaved((list) => list.filter((l) => locKey(l) !== locKey(loc)));
 
-    return {
-      units, setUnits,
-      location, setLocation,
-      saved, addSaved, removeSaved,
-      defaultLocation, setDefaultLocation,
-      theme, setTheme,
-      notify, setNotify,
-      a11y, setA11y,
+    const changeTheme = (next) => {
+      const root = document.documentElement;
+      root.classList.add("theme-fade");
+      setTheme(next);
+      setTimeout(() => root.classList.remove("theme-fade"), 400);
     };
-  }, [units, setUnits, location, saved, setSaved, defaultLocation, setDefaultLocation, theme, setTheme, notify, setNotify, a11y, setA11y]);
 
-  return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
+    return {
+      units,
+      setUnits,
+      location,
+      setLocation,
+      saved,
+      addSaved,
+      removeSaved,
+      defaultLocation,
+      setDefaultLocation,
+      theme,
+      setTheme: changeTheme,
+      notify,
+      setNotify,
+      a11y,
+      setA11y,
+    };
+  }, [
+    units,
+    setUnits,
+    location,
+    saved,
+    setSaved,
+    defaultLocation,
+    setDefaultLocation,
+    theme,
+    setTheme,
+    notify,
+    setNotify,
+    a11y,
+    setA11y,
+  ]);
+
+  return (
+    <SettingsContext.Provider value={value}>
+      {children}
+    </SettingsContext.Provider>
+  );
 }

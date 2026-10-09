@@ -59,11 +59,17 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-4xl space-y-8">
+    <div
+      key={`${location.latitude},${location.longitude}`}
+      className="stagger max-w-4xl space-y-8"
+    >
       <OfflineBanner updatedAt={dataUpdatedAt} />
       <WeatherHero location={location} data={data} unit={units.temp} />
       <StatsRow data={data} speedUnit={units.speed} />
-      <nav aria-label="More weather" className="flex flex-wrap gap-x-6 md:hidden">
+      <nav
+        aria-label="More weather"
+        className="flex flex-wrap gap-x-6 md:hidden"
+      >
         <Link to="/details" className={linkClass}>
           All weather details
         </Link>
