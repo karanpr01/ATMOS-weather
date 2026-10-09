@@ -77,6 +77,16 @@ export default function Layout() {
               <Outlet />
             </div>
           </Suspense>
+          <footer className="mt-10 border-t border-border pt-4 text-sm text-muted-foreground">
+            Weather data by{" "}
+            <a
+              href="https://open-meteo.com/"
+              className="inline-flex min-h-11 items-center underline"
+            >
+              Open-Meteo.com
+            </a>
+            . Map © OpenStreetMap contributors.
+          </footer>
         </main>
       </div>
 
